@@ -1,12 +1,12 @@
 const formState = 'feedback-form-state';
 const form = document.querySelector('.feedback-form');
-
+const formData = { email: '', message: '' };
 const localState = JSON.parse(localStorage.getItem(formState));
 
 if (localState) {
-
-  for (const key of Object.keys(localState)) {
-    document.querySelector(`[name="${key}"]`).value = localState[key];
+  Object.assign(formData, localState);
+  for (const key in formData) {
+    document.querySelector(`[name="${key}"]`).value = formData[key];
   }
 }
 
@@ -15,34 +15,31 @@ form.addEventListener('submit', onSubmitForm);
 
 function onInputSaveToLocalStorage(event) {
   const key = event.target.name;
-  const updatedStorage = {
-    ...JSON.parse(localStorage.getItem(formState)),
-    [key]: event.target.value.trim(),
-  };
+  
+  formData[key] = event.target.value.trim();
 
-  localStorage.setItem(formState, JSON.stringify(updatedStorage));
+  localStorage.setItem(formState, JSON.stringify(formData));
 }
 
 function onSubmitForm(event) {
   event.preventDefault();
 
-  const formData = new FormData(event.target);
-  const formDataObj = Object.fromEntries(formData.entries());
-  if (validateFormFields(formDataObj)) {
+  if (validateFormFields(formData)) {
 
-    console.log('submit', formDataObj);
+    console.log('submit', formData);
+    Object.keys(formData).forEach(key => (formData[key] = ''));
     localStorage.removeItem(formState);
     event.target.reset();
   }
 }
+
 function validateFormFields(formDataObj) {
   let isValid = true;
   for (const key in formDataObj) {
     if (!formDataObj[key]) {
       addBorderInputError(document.querySelector(`[name="${key}"]`));
       isValid = false;
-    }
-    if (formDataObj[key]) {
+    } else {
       removeBorderInputError(document.querySelector(`[name="${key}"]`));
     }
   }

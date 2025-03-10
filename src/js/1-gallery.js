@@ -1,5 +1,5 @@
-import SimpleLightbox from 'simplelightbox/dist/simple-lightbox.esm';
-import 'simplelightbox/dist/simple-lightbox.min.css';
+import SimpleLightbox from 'simplelightbox';
+
 
 const galleryContainer = document.querySelector('.gallery');
 
@@ -83,4 +83,4 @@ const galleryMarkup = images
 
 galleryContainer.innerHTML = galleryMarkup;
 
-new SimpleLightbox('.gallery a', { captionsData: 'alt', captionDelay: 250 });
+new SimpleLightbox('.gallery a', { captionsData: 'alt', captionDelay: 500 });
